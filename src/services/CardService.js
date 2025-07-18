@@ -29,14 +29,15 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      // Token süresi dolmuş veya geçersiz
       localStorage.removeItem('authToken');
       localStorage.removeItem('userInfo');
-      window.location.href = '/';
+      window.location.reload(); // Sayfayı yenile, AuthContext otomatik login sayfasını gösterecek
     }
     return Promise.reject(error);
   }
 );
-//emiran
+
 // Auth API calls
 export const authAPI = {
   login: async (credentials) => {
@@ -104,14 +105,16 @@ export const utils = {
   
   // Token var mı kontrol et
   isAuthenticated: () => {
-    return localStorage.getItem('authToken') !== null;
+    const token = localStorage.getItem('authToken');
+    const userInfo = localStorage.getItem('userInfo');
+    return !!(token && userInfo);
   },
   
-  // Logout işlemi
+  // Logout işlemi (Artık AuthContext'te yapılacak)
   logout: () => {
+    console.warn('utils.logout() deprecated. Use AuthContext logout instead.');
     localStorage.removeItem('authToken');
     localStorage.removeItem('userInfo');
-    window.location.href = '/';
   },
   
   // Token ve user bilgilerini kaydet

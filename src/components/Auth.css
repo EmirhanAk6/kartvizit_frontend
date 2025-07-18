@@ -1,0 +1,235 @@
+/* Desktop-First Auth Styles */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+}
+
+.auth-content {
+  width: 100%;
+  max-width: 600px; /* Desktop için daha geniş */
+}
+
+.auth-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  border: none;
+  overflow: hidden;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-top: 1rem;
+}
+
+.auth-title {
+  font-size: 3.5rem; /* Desktop için büyük */
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  letter-spacing: -1px;
+}
+
+.auth-subtitle {
+  color: #6c757d;
+  font-size: 1.3rem; /* Desktop için büyük */
+  margin: 0;
+  font-weight: 400;
+}
+
+.form-floating-custom {
+  position: relative;
+  margin-bottom: 2rem; /* Desktop için daha fazla boşluk */
+}
+
+.form-control-custom {
+  height: 65px; /* Desktop için yüksek */
+  border-radius: 15px;
+  border: 2px solid #e9ecef;
+  font-size: 1.1rem; /* Desktop için büyük font */
+  padding: 1rem 1.5rem;
+  transition: all 0.3s ease;
+  background-color: #fafbfc;
+}
+
+.form-control-custom:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.15);
+  background-color: white;
+}
+
+.form-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.75rem;
+}
+
+.btn-auth {
+  height: 65px; /* Desktop için yüksek buton */
+  border-radius: 15px;
+  font-size: 1.2rem; /* Desktop için büyük */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.btn-auth:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary.btn-auth {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+}
+
+.btn-success.btn-auth {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  border: none;
+}
+
+.switch-auth {
+  text-align: center;
+  padding: 1.5rem;
+  border-top: 1px solid #e9ecef;
+  margin-top: 2rem;
+  background-color: #f8f9fa;
+}
+
+.switch-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.switch-link:hover {
+  color: #764ba2;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.alert {
+  border-radius: 12px;
+  font-size: 1rem;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border: none;
+}
+
+.card-body {
+  padding: 3rem !important; /* Desktop için bol padding */
+}
+
+.card-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+}
+
+.spinner-border-sm {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+/* Tablet için orta boyut */
+@media (max-width: 992px) {
+  .auth-content {
+    max-width: 500px;
+  }
+  
+  .auth-title {
+    font-size: 2.8rem;
+  }
+  
+  .auth-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .form-control-custom {
+    height: 60px;
+    font-size: 1rem;
+  }
+  
+  .btn-auth {
+    height: 60px;
+    font-size: 1.1rem;
+  }
+  
+  .card-body {
+    padding: 2.5rem !important;
+  }
+}
+
+/* Mobile için kompakt */
+@media (max-width: 768px) {
+  .auth-container {
+    padding: 15px;
+  }
+  
+  .auth-content {
+    max-width: 100%;
+  }
+  
+  .auth-title {
+    font-size: 2.2rem;
+  }
+  
+  .auth-subtitle {
+    font-size: 1rem;
+  }
+  
+  .form-control-custom {
+    height: 55px;
+    font-size: 1rem;
+    padding: 0.875rem 1.25rem;
+  }
+  
+  .btn-auth {
+    height: 55px;
+    font-size: 1rem;
+  }
+  
+  .card-body {
+    padding: 2rem !important;
+  }
+  
+  .form-floating-custom {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .auth-container {
+    padding: 10px;
+  }
+  
+  .auth-title {
+    font-size: 1.8rem;
+  }
+  
+  .auth-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .card-body {
+    padding: 1.5rem !important;
+  }
+  
+  .auth-header {
+    margin-bottom: 2rem;
+  }
+}
