@@ -28,12 +28,22 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.log('Axios response error:', error.response?.status);
+    
     if (error.response?.status === 401) {
+      console.log('401 error - Token expired or invalid');
+      
       // Token süresi dolmuş veya geçersiz
       localStorage.removeItem('authToken');
       localStorage.removeItem('userInfo');
-      window.location.reload(); // Sayfayı yenile, AuthContext otomatik login sayfasını gösterecek
+      
+      // Sadece login sayfasında değilsek yönlendir
+      if (!window.location.pathname.includes('/login')) {
+        console.log('Redirecting to login due to 401');
+        window.location.href = '/';
+      }
     }
+    
     return Promise.reject(error);
   }
 );
@@ -99,14 +109,23 @@ export const cardsAPI = {
 export const utils = {
   // Token'dan user bilgilerini al
   getCurrentUser: () => {
-    const userInfo = localStorage.getItem('userInfo');
-    return userInfo ? JSON.parse(userInfo) : null;
+    try {
+      const userInfo = localStorage.getItem('userInfo');
+      return userInfo ? JSON.parse(userInfo) : null;
+    } catch (error) {
+      console.error('Error parsing user info from localStorage:', error);
+      return null;
+    }
   },
   
   // Token var mı kontrol et
   isAuthenticated: () => {
     const token = localStorage.getItem('authToken');
     const userInfo = localStorage.getItem('userInfo');
+    
+    console.log('isAuthenticated check - Token exists:', !!token);
+    console.log('isAuthenticated check - UserInfo exists:', !!userInfo);
+    
     return !!(token && userInfo);
   },
   
@@ -119,8 +138,10 @@ export const utils = {
   
   // Token ve user bilgilerini kaydet
   saveAuthData: (token, userInfo) => {
+    console.log('Saving auth data to localStorage');
     localStorage.setItem('authToken', token);
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    console.log('Auth data saved successfully');
   }
 };
 
