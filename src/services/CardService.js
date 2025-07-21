@@ -74,15 +74,41 @@ export const cardsAPI = {
     return response.data;
   },
   
-  // Kartvizit oluştur
-  createCard: async (userId, cardData) => {
-    const response = await api.post(`/${userId}/cards/create`, cardData);
+  // Kartvizit oluştur - DÜZELTME: Backend'in beklediği formata göre
+  createCard: async (cardData) => {
+    console.log('Creating card with data:', cardData);
+    
+    // Backend'in beklediği format
+    const requestData = {
+      fullName: cardData.title,        // Modal'dan gelen 'title' -> backend'in 'fullName'
+      jobTitle: cardData.name,         // Modal'dan gelen 'name' -> backend'in 'jobTitle'
+      phone: cardData.phone,
+      email: cardData.email,
+      address: cardData.address
+    };
+    
+    console.log('Sending to backend:', requestData);
+    
+    const response = await api.post(`/${cardData.userId}/cards/create`, requestData);
     return response.data;
   },
   
   // Kartvizit güncelle
-  updateCard: async (userId, cardId, cardData) => {
-    const response = await api.put(`/${userId}/cards/my-cards/${cardId}`, cardData);
+  updateCard: async (cardId, cardData) => {
+    console.log('Updating card with data:', cardData);
+    
+    // Backend'in beklediği format
+    const requestData = {
+      fullName: cardData.title,        // Modal'dan gelen 'title' -> backend'in 'fullName'
+      jobTitle: cardData.name,         // Modal'dan gelen 'name' -> backend'in 'jobTitle'
+      phone: cardData.phone,
+      email: cardData.email,
+      address: cardData.address
+    };
+    
+    console.log('Sending update to backend:', requestData);
+    
+    const response = await api.put(`/${cardData.userId}/cards/my-cards/${cardId}`, requestData);
     return response.data;
   },
   

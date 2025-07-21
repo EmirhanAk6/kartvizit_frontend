@@ -13,7 +13,14 @@ const CardModal = ({ isOpen, onClose, onSave, existingCard }) => {
 
   useEffect(() => {
     if (existingCard) {
-      setFormData(existingCard);
+      // Backend'den gelen veriyi modal formatına çevir
+      setFormData({
+        title: existingCard.fullName || '',     // Backend: fullName -> Modal: title
+        name: existingCard.jobTitle || '',      // Backend: jobTitle -> Modal: name  
+        phone: existingCard.phone || '',
+        email: existingCard.email || '',
+        address: existingCard.address || ''
+      });
     } else {
       setFormData({
         title: '',
@@ -23,7 +30,7 @@ const CardModal = ({ isOpen, onClose, onSave, existingCard }) => {
         address: ''
       });
     }
-  }, [existingCard]);
+  }, [existingCard, isOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,14 +38,35 @@ const CardModal = ({ isOpen, onClose, onSave, existingCard }) => {
   };
 
   const handleSave = async () => {
+    // Validasyon
+    if (!formData.title.trim()) {
+      alert('İsim alanı zorunludur!');
+      return;
+    }
+
+    if (!formData.phone.trim()) {
+      alert('Telefon numarası alanı zorunludur!');
+      return;
+    }
+
     setLoading(true);
-    await onSave(formData);
-    setLoading(false);
+    
+    try {
+      await onSave(formData);
+    } catch (error) {
+      console.error('Save error in modal:', error);
+      alert('Kart kaydedilirken bir hata oluştu: ' + (error.message || 'Bilinmeyen hata'));
+    } finally {
+      setLoading(false);
+    }
   };
+
+  // Modal kapalıysa render etme
+  if (!isOpen) return null;
 
   return (
     <div
-      className={`modal fade ${isOpen ? 'show d-block' : ''}`}
+      className="modal fade show d-block"
       tabIndex="-1"
       role="dialog"
       style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
@@ -49,7 +77,12 @@ const CardModal = ({ isOpen, onClose, onSave, existingCard }) => {
             <h5 className="modal-title">
               {existingCard ? 'Kartviziti Düzenle' : 'Kartvizit Ekle'}
             </h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            <button 
+              type="button" 
+              className="btn-close" 
+              onClick={onClose}
+              disabled={loading}
+            ></button>
           </div>
 
           <div className="modal-body">
@@ -58,11 +91,14 @@ const CardModal = ({ isOpen, onClose, onSave, existingCard }) => {
                 <div className="progress">
                   <div className="progress-bar progress-bar-striped progress-bar-animated w-100"></div>
                 </div>
+                <small className="text-muted">Kaydediliyor...</small>
               </div>
             )}
 
             <div className="mb-3">
-              <label className="form-label">*İsim</label>
+              <label className="form-label">
+                <span className="text-danger">*</span> İsim
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -70,22 +106,28 @@ const CardModal = ({ isOpen, onClose, onSave, existingCard }) => {
                 value={formData.title}
                 onChange={handleChange}
                 required
+                disabled={loading}
+                placeholder="Ad Soyad"
               />
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Ünvan</label>
+              <label className="form-label">Ünvan / Pozisyon</label>
               <input
                 type="text"
                 className="form-control"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
+                disabled={loading}
+                placeholder="Örn: Yazılım Geliştirici"
               />
             </div>
 
             <div className="mb-3">
-              <label className="form-label">*Telefon Numarası</label>
+              <label className="form-label">
+                <span className="text-danger">*</span> Telefon Numarası
+              </label>
               <input
                 type="tel"
                 className="form-control"
@@ -93,6 +135,8 @@ const CardModal = ({ isOpen, onClose, onSave, existingCard }) => {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="0 XXX XXX XXXX"
+                disabled={loading}
+                required
               />
             </div>
 
@@ -104,6 +148,8 @@ const CardModal = ({ isOpen, onClose, onSave, existingCard }) => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
+                disabled={loading}
+                placeholder="ornek@email.com"
               />
             </div>
 
@@ -114,21 +160,40 @@ const CardModal = ({ isOpen, onClose, onSave, existingCard }) => {
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
+                disabled={loading}
+                rows="3"
+                placeholder="İş veya ev adresi"
               ></textarea>
             </div>
+
+            <small className="text-muted">
+              <span className="text-danger">*</span> işaretli alanlar zorunludur.
+            </small>
           </div>
 
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
+            <button 
+              type="button" 
+              className="btn btn-secondary" 
+              onClick={onClose}
+              disabled={loading}
+            >
               Vazgeç
             </button>
             <button
               type="button"
               className="btn btn-primary"
               onClick={handleSave}
-              disabled={loading || !formData.title || !formData.phone}
+              disabled={loading || !formData.title.trim() || !formData.phone.trim()}
             >
-              {existingCard ? 'Güncelle' : 'Ekle'}
+              {loading ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2" />
+                  {existingCard ? 'Güncelleniyor...' : 'Ekleniyor...'}
+                </>
+              ) : (
+                existingCard ? 'Güncelle' : 'Ekle'
+              )}
             </button>
           </div>
         </div>

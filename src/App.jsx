@@ -2,6 +2,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import AuthPage from './components/AuthPage';
 import Dashboard from './components/Dashboard';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css'; // Global CSS'i import et
 import './App.css';
 
 // Ana uygulama içeriği
@@ -12,7 +13,7 @@ const AppContent = () => {
 
   if (loading) {
     return (
-      <div className="vh-100 d-flex align-items-center justify-content-center">
+      <div className="vh-100 vw-100 d-flex align-items-center justify-content-center">
         <div className="text-center">
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -25,7 +26,11 @@ const AppContent = () => {
 
   console.log('Rendering:', user ? 'Dashboard' : 'AuthPage');
   
-  return user ? <Dashboard /> : <AuthPage />;
+  return (
+    <div className="app-container">
+      {user ? <Dashboard /> : <AuthPage />}
+    </div>
+  );
 };
 
 // Ana App component
